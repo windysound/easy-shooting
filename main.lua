@@ -1,13 +1,11 @@
--- alt + l runs in love2d
--- 关闭lua诊断以关闭命名检查的波浪线
-
 G = require("globals")
+local menu = require("menu")
 
 function love.load()
     -- main table for whole project
 	love.window.setTitle("target game")
 
-	music = love.audio.newSource("sound/mus.wav", "stream")
+	music = love.audio.newSource("sound/melody2.wav", "stream")
 	music:setLooping(true)
 	music:play()
 
@@ -55,6 +53,7 @@ function love.draw()
 		love.graphics.printf("Click anywhere to begin!", 0, 250, love.graphics.getWidth(), "center")
 	elseif gameState == "playing" and timer == 0 then
 		gameState = "gameEnd"
+	elseif gameState == "gameEnd" then
 		love.graphics.printf("Your score is " .. score, 0, 250, love.graphics.getWidth(), "center")
 	end
 
@@ -120,10 +119,4 @@ function love.keypressed(key)
 		-- reload the game
 		love.load()
 	end
-end
-
-function menu()
-	gameState = "menu"
-	-- 毛玻璃
-	-- 加入一个擦唱片的暂停音效同时音乐暂停
 end
