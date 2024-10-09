@@ -1,11 +1,18 @@
 G = require("globals")
-local menu = require("menu")
+states = {
+	"playing",
+	"start",
+	"gameEnd",
+	"pause"
+}
+require("menu")
+
 
 function love.load()
     -- main table for whole project
 	love.window.setTitle("target game")
 
-	music = love.audio.newSource("sound/melody2.wav", "stream")
+	music = love.audio.newSource("sound/melody3.wav", "stream")
 	music:setLooping(true)
 	music:play()
 
@@ -78,6 +85,11 @@ function love.draw()
 
     local crosshairWidth = sprites.crosshair:getWidth()
     local crosshairHeight = sprites.crosshair:getHeight()
+
+	if gameState == states[4] then
+		showmenu()
+	end
+
 	-- put crosshair in the cursor center
 	love.graphics.draw(
 		sprites.crosshair,
@@ -89,7 +101,7 @@ end
 
 function love.mousepressed( x, y, button, istouch, presses )
     -- check the left click and increase the score
-    if button == 1 and gameState == "playing" and timer ~= 0 then
+    if button == 1 and gameState == states[1] and timer ~= 0 then
         mouseToTarget = distanceBetween(x, y, target.x, target.y)
 		-- clicked in the target
         if mouseToTarget < target.radius then
@@ -102,7 +114,7 @@ function love.mousepressed( x, y, button, istouch, presses )
             target.y = math.random(target.radius, love.graphics.getHeight() - target.radius)
         end
 	elseif button == 1 then
-		gameState = "playing"
+		gameState = states[1]
 		timer = 10
 		score = 0
 	end
@@ -114,7 +126,7 @@ end
 
 function love.keypressed(key)
 	if key == "escape" then
-		menu()
+		gameState = states[4]
 	elseif key == "r" then
 		-- reload the game
 		love.load()
